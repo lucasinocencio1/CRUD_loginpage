@@ -332,7 +332,7 @@ class __login__:
         st.markdown(""" <style>
         #MainMenu {visibility: hidden;}
         </style> """, unsafe_allow_html=True)
-    
+
     def create_footer(self) -> None:
         """
         Creates the footer of the page.
@@ -404,6 +404,3 @@ class __login__:
             self.hide_footer()
         
         return st.session_state['LOGGED_IN']
-
-
-
