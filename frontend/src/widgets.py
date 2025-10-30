@@ -277,14 +277,40 @@ class __login__:
         </style> """, unsafe_allow_html=True)
     
 
-    def hide_footer(self) -> None:
+    # def hide_footer(self) -> None:
+    #     """
+    #     Hides the 'made with streamlit' footer.
+    #     """
+    #     st.markdown(""" <style>
+    #     footer {visibility: hidden;}
+    #     </style> """, unsafe_allow_html=True)
+    def create_footer(self) -> None:
         """
-        Hides the 'made with streamlit' footer.
+        Creates the footer of the page.
         """
+        # Hide default Streamlit footer
         st.markdown(""" <style>
         footer {visibility: hidden;}
+        .stApp { padding-bottom: 3rem; }
         </style> """, unsafe_allow_html=True)
-
+        
+        # Create custom footer
+        st.markdown("""
+        <div style='
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #262730;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+            z-index: 999;
+        '>
+            Created in a pig way 🔥
+        </div>
+        """, unsafe_allow_html=True)
 
     def build_login_ui(self):
         """
@@ -295,12 +321,6 @@ class __login__:
 
         if 'LOGOUT_BUTTON_HIT' not in st.session_state:
             st.session_state['LOGOUT_BUTTON_HIT'] = False
-
-        auth_json_exists_bool = self.check_auth_json_file_exists('_secret_auth_.json')
-
-        if auth_json_exists_bool == False:
-            with open("_secret_auth_.json", "w") as auth_json:
-                json.dump([], auth_json)
 
         main_page_sidebar, selected_option = self.nav_sidebar()
 
@@ -329,7 +349,9 @@ class __login__:
         if self.hide_menu_bool == True:
             self.hide_menu()
         
-        if self.hide_footer_bool == True:
+        if self.hide_footer_bool == False:
+            self.create_footer()
+        else:
             self.hide_footer()
         
         return st.session_state['LOGGED_IN']

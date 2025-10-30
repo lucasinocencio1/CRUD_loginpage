@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
+from argon2 import PasswordHasher #add to create the hash of the password
 from models import Users
 from schemas import UserCreate, UserUpdate
+
+ph = PasswordHasher()
 
 def get_users_by_id(db: Session,user_id: int):
     """
@@ -95,7 +98,8 @@ def update_user_by_email(db: Session, user_email: str, user: UserUpdate):
         db_user.department = user.department
     if user.is_active is not None:
         db_user.is_active = user.is_active
-
+    if user.password is not None:
+        db_user.password = ph.hash(user.password)
     
     db_user.updated_at = datetime.now()
 

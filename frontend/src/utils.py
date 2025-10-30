@@ -69,16 +69,13 @@ def check_unique_email(email_sign_up: str) -> bool:
     """
     Checks if the email already exists (since email needs to be unique).
     """
-    authorized_user_data_master = list()
-    with open("_secret_auth_.json", "r") as auth_json:
-        authorized_users_data = json.load(auth_json)
-
-        for user in authorized_users_data:
-            authorized_user_data_master.append(user['email'])
-
-    if email_sign_up in authorized_user_data_master:
-        return False
-    return True
+    try:
+        response = requests.get(f"{API_URL}/users/email/{email_sign_up}")
+        if response.status_code == 200:
+            return False  # Email already exists
+        return True
+    except:
+        return True
 
 
 def non_empty_str_check(username_sign_up: str) -> bool:
@@ -102,20 +99,20 @@ def check_unique_usr(username_sign_up: str):
     Checks if the username already exists (since username needs to be unique),
     also checks for non - empty username.
     """
-    authorized_user_data_master = list()
-    with open("_secret_auth_.json", "r") as auth_json:
-        authorized_users_data = json.load(auth_json)
-
-        for user in authorized_users_data:
-            authorized_user_data_master.append(user['username'])
-
-    if username_sign_up in authorized_user_data_master:
-        return False
-    
     non_empty_check = non_empty_str_check(username_sign_up)
-
     if non_empty_check == False:
         return None
+    
+    try:
+        response = requests.get(f"{API_URL}/users")
+        if response.status_code == 200:
+            users = response.json()
+            for user in users:
+                if user.get('username') == username_sign_up:
+                    return False
+    except:
+        pass
+    
     return True
 
 
@@ -137,30 +134,31 @@ def register_new_usr(name: str, email: str, username: str, password: str, depart
 
 def check_username_exists(user_name: str) -> bool:
     """
-    Checks if the username exists in the _secret_auth.json file.
+    Checks if the username exists in the database.
     """
-    authorized_user_data_master = list()
-    with open("_secret_auth_.json", "r") as auth_json:
-        authorized_users_data = json.load(auth_json)
-
-        for user in authorized_users_data:
-            authorized_user_data_master.append(user['username'])
-        
-    if user_name in authorized_user_data_master:
-        return True
+    try:
+        response = requests.get(f"{API_URL}/users")
+        if response.status_code == 200:
+            users = response.json()
+            for user in users:
+                if user.get('username') == user_name:
+                    return True
+    except:
+        pass
     return False
         
 
 def check_email_exists(email_forgot_passwd: str):
     """
-    Checks if the email entered is present in the _secret_auth.json file.
+    Checks if the email entered is present in the database.
     """
-    with open("_secret_auth_.json", "r") as auth_json:
-        authorized_users_data = json.load(auth_json)
-
-        for user in authorized_users_data:
-            if user['email'] == email_forgot_passwd:
-                    return True, user['username']
+    try:
+        response = requests.get(f"{API_URL}/users/email/{email_forgot_passwd}")
+        if response.status_code == 200:
+            user = response.json()
+            return True, user.get('username', '')
+    except:
+        pass
     return False, None
 
 
@@ -198,29 +196,30 @@ def change_passwd(email_: str, random_password: str) -> None:
     """
     Replaces the old password with the newly generated password.
     """
-    with open("_secret_auth_.json", "r") as auth_json:
-        authorized_users_data = json.load(auth_json)
-
-    with open("_secret_auth_.json", "w") as auth_json_:
-        for user in authorized_users_data:
-            if user['email'] == email_:
-                user['password'] = ph.hash(random_password)
-        json.dump(authorized_users_data, auth_json_)
+    try:
+        response = requests.put(f"{API_URL}/users/email/{email_}", json={
+            "password": random_password
+        })
+        if response.status_code == 200:
+            st.success("Password changed successfully")
+        else:
+            st.error("Failed to change password")
+    except Exception as e:
+        st.error(f"Error changing password: {e}")
     
 
 def check_current_passwd(email_reset_passwd: str, current_passwd: str) -> bool:
     """
-    Authenticates the password entered against the username when 
+    Authenticates the password entered against the email when 
     resetting the password.
     """
-    with open("_secret_auth_.json", "r") as auth_json:
-        authorized_users_data = json.load(auth_json)
-
-        for user in authorized_users_data:
-            if user['email'] == email_reset_passwd:
-                try:
-                    if ph.verify(user['password'], current_passwd) == True:
-                        return True
-                except:
-                    pass
+    try:
+        response = requests.post(f"{API_URL}/auth/login", json={
+            "email": email_reset_passwd,
+            "password": current_passwd
+        })
+        if response.status_code == 200:
+            return True
+    except:
+        pass
     return False
