@@ -80,7 +80,7 @@ class __login__:
 
             del_login = st.empty()
             with del_login.form("Login Form"):
-                username = st.text_input("Username", placeholder = 'Your unique username')
+                username = st.text_input("Username", placeholder = 'Your email')
                 password = st.text_input("Password", placeholder = 'Your password', type = 'password')
 
                 st.markdown("###")
@@ -97,7 +97,7 @@ class __login__:
                         self.cookies['__streamlit_login_signup_ui_username__'] = username
                         self.cookies.save()
                         del_login.empty()
-                        st.experimental_rerun()
+                        st.rerun()
 
 
     def animation(self) -> None:
