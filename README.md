@@ -100,5 +100,37 @@ Notes:
 - If you don’t need a custom port, keep `DB_PORT=5432`.
 
 
+## Docker and Docker Compose
+
+### Prerequisites
+- Docker and Docker Compose installed
+
+### Environment variables
+Create a `.env` in the project root (same folder as `docker-compose.yml`):
+```bash
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=crud
+COURIER_AUTH_TOKEN=your_courier_token
+```
+
+Notes:
+- Backend reads DB_* envs. The compose sets `DB_HOST=db` (the Postgres service name).
+- Frontend requires `COURIER_AUTH_TOKEN`. If missing, it stops with an error.
+
+### Build and run
+From the project root:
+```bash
+docker compose up -d --build
+```
+
+Services and ports:
+- Backend (FastAPI): http://localhost:8000
+- Frontend (Streamlit): http://localhost:8510 (host port mapped to container 8501)
+- Postgres: localhost:5432
+
+
 ###Author
 Lucas Inocêncio
