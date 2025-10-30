@@ -7,9 +7,9 @@ from src.widgets import __login__
 st.markdown("""
 <style>
     .stButton > button {
-        background-color: #8500e5 !important;
+        background-color: #1c27ff!important;
         color: white !important;
-        border-color: #8500e5 !important;
+        border-color: #1c27ff !important;
     }
     .stButton > button:hover {
         background-color: #6500b8 !important;
