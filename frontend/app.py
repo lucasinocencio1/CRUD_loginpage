@@ -1,7 +1,18 @@
 import streamlit as st
+import os
+from dotenv import load_dotenv
 from src.widgets import __login__
 
-__login__obj = __login__(auth_token = "courier_auth_token",
+# Load environment variables
+load_dotenv()
+
+# Get Courier auth token from environment
+courier_token = os.getenv("COURIER_AUTH_TOKEN")
+if not courier_token:
+    st.error("COURIER_AUTH_TOKEN dont found in the .env file")
+    st.stop()
+
+__login__obj = __login__(auth_token = courier_token,
                     company_name = "Shims",
                     width = 200, height = 250,
                     logout_button_name = 'Logout', hide_menu_bool = False,

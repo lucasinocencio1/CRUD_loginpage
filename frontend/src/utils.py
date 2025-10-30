@@ -174,22 +174,23 @@ def send_passwd_in_email(auth_token: str, username_forgot_passwd: str, email_for
     """
     Triggers an email to the user containing the randomly generated password.
     """
-    client = Courier(auth_token = auth_token)
+    try:
+        client = Courier(auth_token=auth_token)
 
-    resp = client.send_message(
-    message={
-        "to": {
-        "email": email_forgot_passwd
-        },
-        "content": {
-        "title": company_name + ": Login Password!",
-        "body": "Hi! " + username_forgot_passwd + "," + "\n" + "\n" + "Your temporary login password is: " + random_password  + "\n" + "\n" + "{{info}}"
-        },
-        "data":{
-        "info": "Please reset your password at the earliest for security reasons."
-        }
-    }
-    )
+        resp = client.send_message(
+            message={
+                "to": {
+                    "email": email_forgot_passwd
+                },
+                "content": {
+                    "title": company_name + ": Login Password!",
+                    "body": "Hi! " + username_forgot_passwd + "," + "\n" + "\n" + "Your temporary login password is: " + random_password + "\n" + "\n" + "Please reset your password at the earliest for security reasons."
+                }
+            }
+        )
+        st.info("Password reset email sent successfully!")
+    except Exception as e:
+        st.error(f"Error sending email: {e}")
 
 
 def change_passwd(email_: str, random_password: str) -> None:
