@@ -6,3 +6,5 @@ psycopg2-binary
 psycopg2
 uvicorn
 psycopg2 #to connect to the postgres database
+load_dotenv()
+psycopg2-binary #to connect to the postgres database

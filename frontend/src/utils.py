@@ -127,9 +127,11 @@ def register_new_usr(name: str, email: str, username: str, password: str, depart
         if response.status_code == 200:
             st.success("Registro exitoso!")
         else:
-            st.error(response.json().get("detail", "Error al registrar usuario."))
+            st.error(f"Erro: {response.json()}")
     except Exception as e:
         st.error(f"Error de conexión: {e}")
+        import traceback
+        st.error(traceback.format_exc())
 
 
 def check_username_exists(user_name: str) -> bool:

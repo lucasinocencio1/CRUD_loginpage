@@ -126,9 +126,9 @@ class __login__:
             password_sign_up = st.text_input("Password *", placeholder = 'Create a strong password', type = 'password')
 
             department_sign_up = st.selectbox(
-            "Departamento *",
-            ["HR", "IT", "FINANCE", "MARKETING", "SALES", "CUSTOMER_SERVICE", "SUPPORT", "ADMIN", "OTHER"]
-)
+                "Departamento *",
+                ["HR", "IT", "FINANCE", "MARKETING", "SALES", "CUSTOMER_SERVICE", "SUPPORT", "ADMIN", "OTHER"]
+            )
             
             st.markdown("###")
             sign_up_submit_button = st.form_submit_button(label = 'Register')
