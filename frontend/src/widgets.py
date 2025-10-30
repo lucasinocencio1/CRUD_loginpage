@@ -120,7 +120,7 @@ class __login__:
             # CSS spaces and align the options
             st.markdown("""
                 <style>
-                /* Reduz espaço entre senha e botão */
+                /* reduce the space between the password and the login button */
                 div[data-testid="stForm"] > div:nth-child(3) {
                     margin-top: -5px;
                 }
