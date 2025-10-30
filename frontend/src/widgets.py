@@ -53,7 +53,7 @@ class __login__:
         if not self.cookies.ready():
             st.stop()   
 
-            
+
     def get_username(self):
         if st.session_state['LOGOUT_BUTTON_HIT'] == False:
             fetched_cookies = self.cookies
@@ -189,7 +189,7 @@ class __login__:
             email_reset_passwd = st.text_input("Email", placeholder= 'Please enter your email')
             email_exists_check, username_reset_passwd = check_email_exists(email_reset_passwd)
 
-            current_passwd = st.text_input("Temporary Password", placeholder= 'Please enter the password you received in the email')
+            current_passwd = st.text_input("Temporary Password", placeholder= 'Please enter the password you received in the email', type = 'password')
             current_passwd_check = check_current_passwd(email_reset_passwd, current_passwd)
 
             new_passwd = st.text_input("New Password", placeholder= 'Please enter a new, strong password', type = 'password')
@@ -257,14 +257,6 @@ class __login__:
         #MainMenu {visibility: hidden;}
         </style> """, unsafe_allow_html=True)
     
-
-    # def hide_footer(self) -> None:
-    #     """
-    #     Hides the 'made with streamlit' footer.
-    #     """
-    #     st.markdown(""" <style>
-    #     footer {visibility: hidden;}
-    #     </style> """, unsafe_allow_html=True)
     def create_footer(self) -> None:
         """
         Creates the footer of the page.

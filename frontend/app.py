@@ -13,7 +13,7 @@ if not courier_token:
     st.stop()
 
 __login__obj = __login__(auth_token = courier_token,
-                    company_name = "Shims",
+                    company_name = "Kraken_IA",
                     width = 200, height = 250,
                     logout_button_name = 'Logout', hide_menu_bool = False,
                     hide_footer_bool = False,
