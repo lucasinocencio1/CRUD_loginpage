@@ -62,6 +62,45 @@ class __login__:
                 return username
  
 
+    # def login_widget(self) -> None:
+    #     """
+    #     Creates the login widget, checks and sets cookies, authenticates the users.
+    #     """
+
+    #     # Checks if cookie exists.
+    #     if st.session_state['LOGGED_IN'] == False:
+    #         if st.session_state['LOGOUT_BUTTON_HIT'] == False:
+    #             fetched_cookies = self.cookies
+    #             if '__streamlit_login_signup_ui_username__' in fetched_cookies.keys():
+    #                 if fetched_cookies['__streamlit_login_signup_ui_username__'] != '1c9a923f-fb21-4a91-b3f3-5f18e3f01182':
+    #                     st.session_state['LOGGED_IN'] = True
+
+    #     if st.session_state['LOGGED_IN'] == False:
+    #         st.session_state['LOGOUT_BUTTON_HIT'] = False 
+
+    #         del_login = st.empty()
+    #         with del_login.form("Login Form"):
+    #             username = st.text_input("Username", placeholder = 'Your email')
+    #             password = st.text_input("Password", placeholder = 'Your password', type = 'password')
+
+    #             st.markdown("###")
+    #             login_submit_button = st.form_submit_button(label = 'Login')
+
+    #             if login_submit_button == True:
+    #                 authenticate_user_check = check_usr_pass(username, password)
+
+    #                 if authenticate_user_check == False:
+    #                     st.error("Invalid Username or Password!")
+
+    #                 else:
+    #                     st.session_state['LOGGED_IN'] = True
+    #                     self.cookies['__streamlit_login_signup_ui_username__'] = username
+    #                     self.cookies.save()
+    #                     del_login.empty()
+    #                     st.rerun()
+
+    #         with st.expander('Forgot password?'):
+    #             self.forgot_password()
     def login_widget(self) -> None:
         """
         Creates the login widget, checks and sets cookies, authenticates the users.
@@ -78,20 +117,57 @@ class __login__:
         if st.session_state['LOGGED_IN'] == False:
             st.session_state['LOGOUT_BUTTON_HIT'] = False 
 
+            # CSS spaces and align the options
+            st.markdown("""
+                <style>
+                /* Reduz espaço entre senha e botão */
+                div[data-testid="stForm"] > div:nth-child(3) {
+                    margin-top: -5px;
+                }
+
+                /* Linha Remember / Forgot */
+                .login-options {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    margin-top: -5px;
+                    font-size: 14px;
+                    color: #b0b0b0;
+                }
+
+                .login-options a {
+                    color: #1f2ed3;
+                    text-decoration: none;
+                }
+
+                .login-options a:hover {
+                    text-decoration: underline;
+                }
+                </style>
+            """, unsafe_allow_html=True)
+
             del_login = st.empty()
             with del_login.form("Login Form"):
-                username = st.text_input("Username", placeholder = 'Your email')
-                password = st.text_input("Password", placeholder = 'Your password', type = 'password')
+                username = st.text_input("Username", placeholder='Your email')
+                password = st.text_input("Password", placeholder='Your password', type='password')
 
-                st.markdown("###")
-                login_submit_button = st.form_submit_button(label = 'Login')
+                # Remember me + Forgot password
+                st.markdown("""
+                <div class='login-options'>
+                    <label><input type='checkbox' checked> Remember me</label>
+                    <a href='#'>Forgot password?</a>
+                </div>
+                """, unsafe_allow_html=True)
 
-                if login_submit_button == True:
+                # login button closer to the options
+                login_submit_button = st.form_submit_button(label='Login')
+
+                if login_submit_button:
                     authenticate_user_check = check_usr_pass(username, password)
 
-                    if authenticate_user_check == False:
+                    if not authenticate_user_check:
                         st.error("Invalid Username or Password!")
-
                     else:
                         st.session_state['LOGGED_IN'] = True
                         self.cookies['__streamlit_login_signup_ui_username__'] = username
@@ -229,7 +305,7 @@ class __login__:
                 st.session_state['LOGGED_IN'] = False
                 self.cookies['__streamlit_login_signup_ui_username__'] = '1c9a923f-fb21-4a91-b3f3-5f18e3f01182'
                 del_logout.empty()
-                st.experimental_rerun()
+                st.rerun()
         
 
     def nav_sidebar(self):
@@ -241,8 +317,8 @@ class __login__:
             selected_option = option_menu(
                 menu_title = 'Navigation',
                 menu_icon = 'list-columns-reverse',
-                icons = ['box-arrow-in-right', 'person-plus', 'x-circle','arrow-counterclockwise'],
-                options = ['Login', 'Create Account', 'Forgot Password?', 'Reset Password'],
+                icons = ['box-arrow-in-right', 'person-plus', 'arrow-counterclockwise'],
+                options = ['Login', 'Create Account', 'Reset Password'],
                 styles = {
                     "container": {"padding": "5px"},
                     "nav-link": {"font-size": "14px", "text-align": "left", "margin":"0px"}} )
@@ -295,6 +371,7 @@ class __login__:
         if 'LOGOUT_BUTTON_HIT' not in st.session_state:
             st.session_state['LOGOUT_BUTTON_HIT'] = False
 
+
         main_page_sidebar, selected_option = self.nav_sidebar()
 
         if selected_option == 'Login':
@@ -308,8 +385,7 @@ class __login__:
         if selected_option == 'Create Account':
             self.sign_up_widget()
 
-        if selected_option == 'Forgot Password?':
-            self.forgot_password()
+    
 
         if selected_option == 'Reset Password':
             self.reset_password()

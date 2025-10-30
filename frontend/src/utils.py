@@ -4,6 +4,7 @@ from trycourier import Courier
 import secrets
 from argon2 import PasswordHasher
 import requests
+import os
 
 
 ph = PasswordHasher() 
@@ -11,7 +12,8 @@ ph = PasswordHasher()
 import requests
 import streamlit as st
 
-API_URL = "http://127.0.0.1:8000"
+# Prefer env var (works in Docker). Fallback to localhost for local dev.
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 def check_usr_pass(email: str, password: str) -> bool:
     try:
