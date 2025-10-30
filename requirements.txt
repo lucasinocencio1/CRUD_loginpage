@@ -5,3 +5,4 @@ fastapi
 psycopg2-binary
 psycopg2
 uvicorn
+psycopg2 #to connect to the postgres database

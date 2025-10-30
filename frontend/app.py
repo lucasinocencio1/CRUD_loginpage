@@ -3,6 +3,21 @@ import os
 from dotenv import load_dotenv
 from src.widgets import __login__
 
+# Custom CSS to force the primary color to #8500e5
+st.markdown("""
+<style>
+    .stButton > button {
+        background-color: #8500e5 !important;
+        color: white !important;
+        border-color: #8500e5 !important;
+    }
+    .stButton > button:hover {
+        background-color: #6500b8 !important;
+        border-color: #6500b8 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Load environment variables
 load_dotenv()
 
