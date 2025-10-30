@@ -116,12 +116,12 @@ class __login__:
             name_sign_up = st.text_input("Name *", placeholder = 'Please enter your name')
             valid_name_check = check_valid_name(name_sign_up)
 
-            email_sign_up = st.text_input("Email *", placeholder = 'Please enter your email')
-            valid_email_check = check_valid_email(email_sign_up)
-            unique_email_check = check_unique_email(email_sign_up)
-            
             username_sign_up = st.text_input("Username *", placeholder = 'Enter a unique username')
             unique_username_check = check_unique_usr(username_sign_up)
+
+            email_sign_up = st.text_input("Email *", placeholder = 'Please enter your email')
+            valid_email_check = check_valid_email(email_sign_up)
+            unique_email_check = check_unique_email(email_sign_up) 
 
             password_sign_up = st.text_input("Password *", placeholder = 'Create a strong password', type = 'password')
 
