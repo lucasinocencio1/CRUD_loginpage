@@ -197,16 +197,18 @@ def change_passwd(email_: str, random_password: str) -> None:
     Replaces the old password with the newly generated password.
     """
     try:
-        response = requests.put(f"{API_URL}/users/email/{email_}", json={
+        # Envia senha em texto claro - backend vai hashear
+        response = requests.put(f"{API_URL}/users/email/{email_}/password", json={
             "password": random_password
         })
+        
         if response.status_code == 200:
             st.success("Password changed successfully")
         else:
-            st.error("Failed to change password")
+            error_detail = response.json().get("detail", "Failed to change password")
+            st.error(f"Error: {error_detail}")
     except Exception as e:
         st.error(f"Error changing password: {e}")
-    
 
 def check_current_passwd(email_reset_passwd: str, current_passwd: str) -> bool:
     """

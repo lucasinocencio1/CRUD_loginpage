@@ -53,26 +53,7 @@ class __login__:
         if not self.cookies.ready():
             st.stop()   
 
-
-    def check_auth_json_file_exists(self, auth_filename: str) -> bool:
-        """
-        Checks if the auth file (where the user info is stored) already exists.
-        """
-        file_names = []
-        for path in os.listdir('./'):
-            if os.path.isfile(os.path.join('./', path)):
-                file_names.append(path)
-
-        present_files = []
-        for file_name in file_names:
-            if auth_filename in file_name:
-                present_files.append(file_name)
-                    
-            present_files = sorted(present_files)
-            if len(present_files) > 0:
-                return True
-        return False
-
+            
     def get_username(self):
         if st.session_state['LOGOUT_BUTTON_HIT'] == False:
             fetched_cookies = self.cookies

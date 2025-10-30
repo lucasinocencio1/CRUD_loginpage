@@ -148,3 +148,32 @@ def login_user_route(login: LoginRequest, db: Session = Depends(get_db)):
         return {"message": "Login successful", "username": user.username}
     except:
         raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+class PasswordChange(BaseModel):
+    password: str
+
+@router.put("/users/email/{user_email}/password")
+def change_password_route(user_email: str, password_data: PasswordChange, db: Session = Depends(get_db)):
+    """
+    Change user password
+    Args:
+        user_email: str
+        password_data: PasswordChange (contém a nova senha)
+        db: Session
+    Returns:
+        dict: Success message
+    """
+    user = db.query(Users).filter(Users.email == user_email).first()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # hash the password
+    hashed_password = ph.hash(password_data.password)
+    user.password = hashed_password
+    
+    db.commit()
+    db.refresh(user)
+    
+    return {"message": "Password changed successfully", "email": user.email}        
