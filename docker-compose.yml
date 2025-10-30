@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: crud_db
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-crud}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: crud_backend
+    environment:
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-crud}
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: crud_frontend
+    environment:
+      COURIER_AUTH_TOKEN: ${COURIER_AUTH_TOKEN:-}
+    depends_on:
+      - backend
+    ports:
+      - "8510:8501"
+
+volumes:
+  db_data:
+
+
